@@ -12,25 +12,49 @@ pool:
   vmImage: ubuntu-latest
 
 jobs:
-- template: src\build\nodejs-build-jobs.yml@UDP
+# - template: src\build\nodejs-build-jobs.yml@UDP
 
-- deployment: 
-  environment: development
-  strategy:  
-    runOnce:
-      deploy:
-        steps:
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:  
+  - job: Build
+    displayName: Build
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '12.x'
+      displayName: 'Install Node.js'
 
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              buildType: 'current'
-              downloadType: 'single'
-              artifactName: 'npm'
-              downloadPath: '$(System.ArtifactsDirectory)'
-          - task: AzureRmWebAppDeployment@4
-            inputs:
-              ConnectionType: 'AzureRM'
-              azureSubscription: 'UDP-MVP'
-              appType: 'webAppLinux'
-              WebAppName: 'wa-udp-nodejs'
-              packageForLinux: '$(System.ArtifactsDirectory)/**/*.tgz'
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      artifact: nodejs
+
+  - deployment: 
+    environment: development
+    strategy:  
+      runOnce:
+        deploy:
+          steps:
+
+            - task: DownloadBuildArtifacts@0
+              inputs:
+                buildType: 'current'
+                downloadType: 'single'
+                artifactName: 'nodejs'
+                downloadPath: '$(System.ArtifactsDirectory)'
+            - task: AzureRmWebAppDeployment@4
+              inputs:
+                ConnectionType: 'AzureRM'
+                azureSubscription: 'UDP-MVP'
+                appType: 'webAppLinux'
+                WebAppName: 'wa-udp-nodejs'
+                packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
