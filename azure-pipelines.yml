@@ -51,10 +51,21 @@ stages:
                 downloadType: 'single'
                 artifactName: 'nodejs'
                 downloadPath: '$(System.ArtifactsDirectory)'
-            - task: AzureRmWebAppDeployment@4
+
+            - task: AzureWebApp@1
+              displayName: 'Azure Web App Deploy: nodejs-cicd'
               inputs:
-                ConnectionType: 'AzureRM'
                 azureSubscription: 'UDP-MVP'
                 appType: 'webAppLinux'
-                WebAppName: 'wa-udp-nodejs'
-                packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
+                appName: 'wa-udp-nodejs'
+                package: '$(Pipeline.Workspace)/nodejs/$(Build.BuildId).zip'
+                runtimeStack: 'NODE|12-lts'
+                startUpCommand: 'npm run start'
+                
+            # - task: AzureRmWebAppDeployment@4
+            #   inputs:
+            #     ConnectionType: 'AzureRM'
+            #     azureSubscription: 'UDP-MVP'
+            #     appType: 'webAppLinux'
+            #     WebAppName: 'wa-udp-nodejs'
+            #     packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
