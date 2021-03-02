@@ -13,3 +13,16 @@ pool:
 
 jobs:
 - template: src\build\nodejs-build-jobs.yml@UDP
+
+- deployment: 
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'UDP-MVP'
+              appType: 'webAppLinux'
+              WebAppName: 'wa-udp-nodejs'
+              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
