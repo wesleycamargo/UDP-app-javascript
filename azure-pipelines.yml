@@ -49,21 +49,21 @@ stages:
                 buildType: 'current'
                 artifactName: 'nodejs'
                 targetPath: '$(Pipeline.Workspace)'
-            - task: AzureWebApp@1
-              displayName: 'Azure Web App Deploy: nodejs-cicd'
-              inputs:
-                azureSubscription: 'UDP-MVP'
-                appType: 'webApp'
-                appName: 'wa-udp-dotnetcore'
-                package: '$(Pipeline.Workspace)/**/*.zip'
-                deploymentMethod: 'auto'
-
             # - task: AzureWebApp@1
             #   displayName: 'Azure Web App Deploy: nodejs-cicd'
             #   inputs:
             #     azureSubscription: 'UDP-MVP'
-            #     appType: 'webAppLinux'
-            #     appName: 'wa-udp-nodejs'
+            #     appType: 'webApp'
+            #     appName: 'wa-udp-dotnetcore'
             #     package: '$(Pipeline.Workspace)/**/*.zip'
-            #     runtimeStack: 'NODE|12-lts'
-            #     startUpCommand: 'npm run start'
+            #     deploymentMethod: 'auto'
+
+            - task: AzureWebApp@1
+              displayName: 'Azure Web App Deploy: nodejs-cicd'
+              inputs:
+                azureSubscription: 'UDP-MVP'
+                appType: 'webAppLinux'
+                appName: 'wa-udp-nodejs'
+                package: '$(Pipeline.Workspace)/**/*.zip'
+                runtimeStack: 'NODE|12-lts'
+                startUpCommand: 'npm run start'
