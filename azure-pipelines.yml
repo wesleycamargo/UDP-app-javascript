@@ -44,16 +44,11 @@ stages:
       runOnce:
         deploy:
           steps:
-
-
             - task: DownloadPipelineArtifact@2
               inputs:
                 buildType: 'current'
                 artifactName: 'nodejs'
                 targetPath: '$(Pipeline.Workspace)'
-            - powershell: | 
-                cd $(Pipeline.Workspace)
-                Get-ChildItem -recurse
             - task: AzureWebApp@1
               displayName: 'Azure Web App Deploy: nodejs-cicd'
               inputs:
@@ -63,11 +58,3 @@ stages:
                 package: '$(Pipeline.Workspace)/**/*.zip'
                 runtimeStack: 'NODE|12-lts'
                 startUpCommand: 'npm run start'
-                
-            # - task: AzureRmWebAppDeployment@4
-            #   inputs:
-            #     ConnectionType: 'AzureRM'
-            #     azureSubscription: 'UDP-MVP'
-            #     appType: 'webAppLinux'
-            #     WebAppName: 'wa-udp-nodejs'
-            #     packageForLinux: '$(System.ArtifactsDirectory)/**/*.zip'
