@@ -15,7 +15,8 @@ jobs:
 - template: src\build\nodejs-build-jobs.yml@UDP
 
 - deployment: 
-  strategy:
+  environment: development
+  strategy:  
     runOnce:
       deploy:
         steps:
