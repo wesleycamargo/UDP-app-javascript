@@ -60,7 +60,7 @@ stages:
                 azureSubscription: 'UDP-MVP'
                 appType: 'webAppLinux'
                 appName: 'wa-udp-nodejs'
-                package: '$(Pipeline.Workspace)/nodejs/$(Build.BuildId).zip'
+                package: '$(Pipeline.Workspace)/**/*.zip'
                 runtimeStack: 'NODE|12-lts'
                 startUpCommand: 'npm run start'
                 
