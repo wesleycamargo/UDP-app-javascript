@@ -20,10 +20,16 @@ jobs:
     runOnce:
       deploy:
         steps:
+
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              buildType: 'current'
+              downloadType: 'single'
+              downloadPath: '$(System.ArtifactsDirectory)'
           - task: AzureRmWebAppDeployment@4
             inputs:
               ConnectionType: 'AzureRM'
               azureSubscription: 'UDP-MVP'
               appType: 'webAppLinux'
               WebAppName: 'wa-udp-nodejs'
-              packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.tgz'
+              packageForLinux: '$(System.ArtifactsDirectory)/**/*.tgz'
