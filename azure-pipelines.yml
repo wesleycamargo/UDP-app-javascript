@@ -11,7 +11,7 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-jobs:
+# jobs:
 # - template: src\build\nodejs-build-jobs.yml@UDP
 
 stages:
