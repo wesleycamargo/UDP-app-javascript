@@ -45,14 +45,14 @@ stages:
         deploy:
           steps:
 
-            - task: DownloadBuildArtifacts@0
+
+            - task: DownloadPipelineArtifact@2
               inputs:
                 buildType: 'current'
-                downloadType: 'single'
                 artifactName: 'nodejs'
-                downloadPath: '$(System.ArtifactsDirectory)'
+                targetPath: '$(Pipeline.Workspace)'
             - powershell: | 
-                cd $(System.ArtifactsDirectory)
+                cd $(Pipeline.Workspace)
                 Get-ChildItem -recurse
             - task: AzureWebApp@1
               displayName: 'Azure Web App Deploy: nodejs-cicd'
